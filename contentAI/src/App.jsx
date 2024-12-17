@@ -1,15 +1,18 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import Layout from './components/dashboard/Layout';
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <div>
-      
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* <Route path="/" element={<BeforeDash />}></Route> */}
+        {/* <Route path="/sign-in" element={<SignIn />} /> */}
+        {/* <Route path="/sign-up" element={<SignUp />} /> */}
+        <Route path="/" element={<Layout />}></Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 

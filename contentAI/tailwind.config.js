@@ -2,7 +2,12 @@
 module.exports = {
   content: ["./src/**/*.{html,js,jsx,cjs}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        playwrite: ["Playwrite NL Guides", 'cursive', ],
+        nigeria: ["Playwrite NG Modern Guides", 'cursive']
+      },
+    },
   },
   plugins: [],
 }
