@@ -12,7 +12,7 @@ const Dashboard = () => {
           Browse Template
         </h1>
         <div className="flex justify-center">
-          <SearchSection onChange={(value) => setUserSearch(value)} />
+          <SearchSection onchange={(value) => setUserSearch(value)} />
         </div>
       </div>
       <TemplateSection userInput={userSearch} />

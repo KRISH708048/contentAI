@@ -1,7 +1,7 @@
 import React from 'react'
 import UsageLimit from '../pages/UsageLimit'
 import Hello from '../pages/Hello'
-import SearchSection from '../pages/SearchSection'
+// import SearchSection from '../pages/SearchSection'
 
 const Header = () => {
   return (

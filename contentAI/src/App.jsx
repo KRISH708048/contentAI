@@ -1,19 +1,30 @@
-import { useState } from 'react'
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
-import Layout from './components/dashboard/Layout';
-function App() {
-  const [count, setCount] = useState(0)
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Layout from "./components/dashboard/Layout";
+import Help from "./components/Sidebar/Help";
+import Billing from "./components/Sidebar/Billing";
+import History from "./components/Sidebar/History";
+import UserProfile from "./components/Sidebar/UserProfile";
+import Setting from "./components/Sidebar/Setting";
+import Dashboard from "./components/dashboard/Dashboard";
+import Content from "./components/dashboard/Content";
 
+function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        {/* <Route path="/" element={<BeforeDash />}></Route> */}
-        {/* <Route path="/sign-in" element={<SignIn />} /> */}
-        {/* <Route path="/sign-up" element={<SignUp />} /> */}
-        <Route path="/" element={<Layout />}></Route>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="Dashboard" element={<Dashboard />} />
+          <Route path="Dashboard/:slug" element={<Content />} />
+          <Route path="Help" element={<Help />} />
+          <Route path="Billing" element={<Billing />} />
+          <Route path="History" element={<History />} />
+          <Route path="Profile" element={<UserProfile />} />
+          <Route path="Settings" element={<Setting />} />
+        </Route>
       </Routes>
-    </BrowserRouter>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;

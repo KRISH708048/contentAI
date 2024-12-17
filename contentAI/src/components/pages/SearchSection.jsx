@@ -1,7 +1,7 @@
 import { Search } from 'lucide-react'
 import React, { useState } from 'react';
 
-const SearchSection = ({ onChange }) => {
+const SearchSection = ({ onchange }) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleChange = (e) => {
