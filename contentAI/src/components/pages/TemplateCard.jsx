@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import Content from "../dashboard/Content";
+import Content from "../content/Content";
 
 const TemplateCard = ({ item, index }) => {
   return (
@@ -21,7 +21,7 @@ const TemplateCard = ({ item, index }) => {
           </h2>
         </div>
 
-        <p className="line-clamp-3 font-nigeria text-sm text-gray-600">
+        <p className="line-clamp-2 font-nigeria text-sm text-gray-600">
           {item.description}
         </p>
       </div>

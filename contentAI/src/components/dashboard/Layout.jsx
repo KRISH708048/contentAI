@@ -10,9 +10,9 @@ const Layout = () => {
         <SideNav />
       </div>
 
-      <div className="md:ml-64 flex flex-col w-full bg-white">
+      <div className="md:ml-64 flex flex-col flex-grow w-full h-screen ">
         <Header />
-        <div className="p-4">
+        <div className="p-4 flex-grow overflow-auto">
           <Outlet />
         </div>
       </div>

@@ -6,7 +6,7 @@ import History from "./components/Sidebar/History";
 import UserProfile from "./components/Sidebar/UserProfile";
 import Setting from "./components/Sidebar/Setting";
 import Dashboard from "./components/dashboard/Dashboard";
-import Content from "./components/dashboard/Content";
+import Content from "./components/content/Content";
 
 function App() {
   return (

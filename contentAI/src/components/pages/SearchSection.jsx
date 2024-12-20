@@ -6,7 +6,7 @@ const SearchSection = ({ onchange }) => {
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
-    onChange(e.target.value); 
+    onchange(e.target.value); 
   };
 
   return (
