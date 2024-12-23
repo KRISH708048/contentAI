@@ -5,6 +5,8 @@ import TextOutput from "./TextOutput";
 import Template from "../pages/Template";
 import { getChatResponse } from "../../../utils/Models";
 import Button from "@mui/joy/Button";
+import { useRecoilState } from "recoil";
+import { tokenAtom } from "../../store/atoms/tokens";
 
 const Content = () => {
   const { slug } = useParams();
@@ -13,23 +15,27 @@ const Content = () => {
   const [aiOutput, setAiOutput] = useState(""); // store gemini output
   const filteredForm = Template.filter((item) => item.slug === slug); // to retrieve current template in use
   const navigateBack = useNavigate();
-
+  const [tokenCount, setTokenCount] = useRecoilState(tokenAtom);
   const handleBackButton = ()=>{
     navigateBack('/Dashboard');
   }
   const GenerativeAI = async () => {
     if (filteredForm.length === 0 || !currentForm) return;
-
+    
+    if (tokenCount >= 10000) {
+      setAiOutput("Token limit reached! Please upgrade or reset your usage.");
+      return;
+    }
     try {
       setLoading(true);
       const currentPrompt = filteredForm[0]?.aiPrompt || "";
       const aiPrompt = JSON.stringify(currentForm) + ", " + currentPrompt;
       const result = await getChatResponse(aiPrompt);
-
       setAiOutput(result);
-      console.log("filteredForm[0]?: ", filteredForm[0]?.slug);
-      console.log("currentForm: ", currentForm);
+      // console.log("filteredForm[0]?: ", filteredForm[0]?.slug);
+      // console.log("currentForm: ", currentForm);
       await saveToDatabase(currentForm, filteredForm[0]?.slug, result);
+      setTokenCount((prevValue) => prevValue + result.length);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching AI response:", error);
@@ -48,6 +54,7 @@ const Content = () => {
           formData: formData,
           aiResponse: resultAi,
           templatesSlug: slug,
+          words: resultAi.length,
           createdBy: "user",
           createdAt: new Date().toISOString(),
         }),
@@ -65,9 +72,11 @@ const Content = () => {
   };
 
   useEffect(() => {
-    if (currentForm) GenerativeAI();
+    if (currentForm && Object.keys(currentForm).length > 0) {
+      GenerativeAI();
+    }
   }, [currentForm]);
-
+  
   return (
     <div className="flex-col p-4 ">
       <Button onClick={handleBackButton} color="neutral">Back</Button>

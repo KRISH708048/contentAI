@@ -3,7 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const router = express.Router();
 const db = new PrismaClient();
 
-const saveAIOutput = async (formData, aiResponse, templatesSlug, createdBy) => {
+const saveAIOutput = async (formData, aiResponse, templatesSlug, words, createdBy) => {
     try {
         const result = await db.aIOutput.create({
             data: {
@@ -11,6 +11,7 @@ const saveAIOutput = async (formData, aiResponse, templatesSlug, createdBy) => {
                 aiResponse,
                 templatesSlug,
                 createdBy,
+                words,
                 createdAt: new Date(),
             },
         });
@@ -23,14 +24,14 @@ const saveAIOutput = async (formData, aiResponse, templatesSlug, createdBy) => {
 };
 
 router.post("/save-ai-output", async (req, res) => {
-    const { formData, aiResponse, templatesSlug, createdBy } = req.body;
+    const { formData, aiResponse, templatesSlug, words, createdBy } = req.body;
 
     if (!formData || !templatesSlug || !createdBy) {
         return res.status(400).json({ error: "Missing required fields." });
     }
 
     try {
-        const result = await saveAIOutput(formData, aiResponse, templatesSlug, createdBy);
+        const result = await saveAIOutput(formData, aiResponse, templatesSlug, words, createdBy);
         res.status(201).json({ message: "AI Output saved successfully!", result });
     } catch (error) {
         res.status(500).json({ error: "Failed to save AI Output.", details: error.message });
@@ -52,5 +53,41 @@ router.get('/history', async (req, res) => {
     }
 });
 
+router.get('/usage', async (req, res) => {
+    const { user } = req.query;
+    if (!user) {
+        return res.status(400).json({ error: "Register first!" });
+    }
+    try {
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999);
+        const totalWords = await db.aIOutput.aggregate({
+            _sum: {
+                words: true,
+            },
+            where: {
+                createdBy: user,
+                createdAt: {
+                    gte: startOfDay,
+                    lte: endOfDay,
+                },
+            },
+        });
+        console.log(totalWords._sum.words || 0);    
+        res.status(200).json({
+            message: "Usage retrieved successfully.",
+            totalWords: totalWords._sum.words || 0,
+        });
+    } catch (error) {
+        console.error("Error calculating usage:", error);
+        res.status(500).json({
+            error: "Failed to calculate usage.",
+            details: error.message,
+        });
+    }
+});
 
 module.exports = router;

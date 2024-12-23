@@ -27,10 +27,6 @@ const SideNav = () => {
 
   const currentRoute = useLocation();
 
-  useEffect(() => {
-    console.log("current/", currentRoute);
-  }, [currentRoute]);
-
   return (
     <div className="flex flex-col h-screen pl-3 pr-3 pb-3 border-r-2">
       <div className="w-full flex justify-center mb-3 border-b-2 h-16">

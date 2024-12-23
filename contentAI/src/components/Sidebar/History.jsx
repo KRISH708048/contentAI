@@ -23,7 +23,7 @@ const History = () => {
         throw new Error("Failed to fetch history");
       }
       const data = await response.json();
-      setHistory(data.data || []);
+      setHistory(data.data || []);  
     } catch (err) {
       console.error("Error fetching history:", err);
       setError(err.message);
@@ -67,8 +67,9 @@ const History = () => {
         >
           <thead>
             <tr>
-              <th style={{ width: "20%", textAlign: "center"}}>Template</th>
+              <th style={{ width: "10%", textAlign: "center"}}>Template</th>
               <th style={{ width: "50%", textAlign: "center" }}>AI Response</th>
+              <th style={{ width: "10%", textAlign: "center" }}>Words</th>
               <th style={{ width: "20%", textAlign: "center" }}>Created At</th>
               <th style={{ width: "10%", textAlign: "center" }}>COPY</th>
             </tr>
@@ -76,8 +77,8 @@ const History = () => {
           <tbody>
             {history.map((entry) => (
               <tr key={entry.id}>
-                <td>{entry.templatesSlug}</td>
-                <td>
+                <td style={{ width: "10%", textAlign: "center"}}>{entry.templatesSlug}</td>
+                <td style={{ width: "50%", textAlign: "center"}}>
                   <div
                     style={{
                       maxHeight: "200px",
@@ -91,8 +92,9 @@ const History = () => {
                     {entry.aiResponse || "No response"}
                   </div>
                 </td>
-                <td>{new Date(entry.createdAt).toLocaleString()}</td>
-                <td><Button color="primary" onClick={() => handleCopy(entry.aiResponse || "No response")}>Copy</Button></td>
+                <td style={{ width: "10%", textAlign: "center"}}>{entry.words}</td>
+                <td style={{ width: "10%", textAlign: "center"}}>{new Date(entry.createdAt).toLocaleString()}</td>
+                <td style={{ width: "10%", textAlign: "center"}}><Button color="primary" onClick={() => handleCopy(entry.aiResponse || "No response")}>Copy</Button></td>
               </tr>
             ))}
           </tbody>

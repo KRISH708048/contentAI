@@ -12,6 +12,7 @@ model AIOutput {
   formData      Json
   aiResponse    String?
   templatesSlug String
+  words         Int
   createdBy     String
   createdAt     DateTime @default(now())
 }
