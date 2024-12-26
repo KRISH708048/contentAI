@@ -3,10 +3,11 @@ const { PrismaClient } = require("@prisma/client");
 const router = express.Router();
 const db = new PrismaClient();
 
-const saveAIOutput = async (formData, aiResponse, templatesSlug, words, createdBy) => {
+const saveAIOutput = async (formData, aiResponse, templatesSlug, words, createdBy, uid) => {
     try {
         const result = await db.aIOutput.create({
             data: {
+                uid,
                 formData: JSON.stringify(formData),
                 aiResponse,
                 templatesSlug,
@@ -23,24 +24,63 @@ const saveAIOutput = async (formData, aiResponse, templatesSlug, words, createdB
     }
 };
 
-router.post("/save-ai-output", async (req, res) => {
-    const { formData, aiResponse, templatesSlug, words, createdBy } = req.body;
+const saveIssue = async (formData, uid) => {
+    try {
+        const result = await db.IssuesForm.create({
+            data: {
+                uid,
+                formData: JSON.stringify(formData),
+                createdAt: new Date(),
+            },
+        });
+        console.log("Saved AI Output:", result);
+        return result;
+    } catch (error) {
+        console.error("Error saving your issue:", error);
+        throw error;
+    }
+};
 
-    if (!formData || !templatesSlug || !createdBy) {
+router.post("/save-ai-output", async (req, res) => {
+    const { formData, aiResponse, templatesSlug, words, createdBy, uid } = req.body;
+
+    if (!formData || !templatesSlug || !createdBy ||!uid) {
         return res.status(400).json({ error: "Missing required fields." });
     }
 
     try {
-        const result = await saveAIOutput(formData, aiResponse, templatesSlug, words, createdBy);
+        const result = await saveAIOutput(formData, aiResponse, templatesSlug, words, createdBy, uid);
         res.status(201).json({ message: "AI Output saved successfully!", result });
     } catch (error) {
         res.status(500).json({ error: "Failed to save AI Output.", details: error.message });
     }
 });
 
-router.get('/history', async (req, res) => {
+router.post("/save-issue", async (req, res) => {
+    const { uid, formData} = req.body;
+    // console.log(formData);
+    if (!formData || !uid) {
+        return res.status(400).json({ error: "Missing required fields." });
+    }
+
     try {
-        const history = await db.aIOutput.findMany({ orderBy: { createdAt: 'desc' } });
+        const result = await saveIssue(formData, uid);
+        res.status(201).json({ message: "Issue saved successfully!", result });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to save Issue.", details: error.message });
+    }
+});
+
+router.get('/history', async (req, res) => {
+    const { userID } = req.query;
+    // console.log(userID);
+    if (!userID) {
+        return res.status(400).json({ error: "User ID is required." });
+    }
+
+    try {
+
+        const history = await db.aIOutput.findMany({where: { uid: userID }, orderBy: { createdAt: 'desc' } });
 
         if (history.length === 0) {
             return res.status(200).json({ message: "No history!" });
@@ -54,8 +94,8 @@ router.get('/history', async (req, res) => {
 });
 
 router.get('/usage', async (req, res) => {
-    const { user } = req.query;
-    if (!user) {
+    const { userID } = req.query;
+    if (!userID) {
         return res.status(400).json({ error: "Register first!" });
     }
     try {
@@ -69,7 +109,7 @@ router.get('/usage', async (req, res) => {
                 words: true,
             },
             where: {
-                createdBy: user,
+                uid: userID,
                 createdAt: {
                     gte: startOfDay,
                     lte: endOfDay,

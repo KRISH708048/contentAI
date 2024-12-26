@@ -9,10 +9,19 @@ datasource db {
 
 model AIOutput {
   id            Int      @id @default(autoincrement())
+  uid           String  
   formData      Json
   aiResponse    String?
   templatesSlug String
   words         Int
   createdBy     String
+  createdAt     DateTime @default(now())
+}
+
+
+model IssuesForm{
+  id            Int      @id @default(autoincrement())
+  uid           String  
+  formData      Json
   createdAt     DateTime @default(now())
 }

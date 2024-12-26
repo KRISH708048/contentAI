@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import LinearProgress from "@mui/joy/LinearProgress";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { tokenAtom } from "../../store/atoms/tokens";
+import { userAtom } from "../../store/atoms/authAtom";
 
 const UsageLimit = () => {
 
   const [usage, setUsage] = useRecoilState(tokenAtom);
-
+  const user = useRecoilValue(userAtom);
   const getToken = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/v1/user/usage?user=user`,
+        `http://localhost:3000/api/v1/user/usage?userID=${user.uid}`,
         {
           method: "GET",
           headers: {

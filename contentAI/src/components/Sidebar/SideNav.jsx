@@ -22,7 +22,7 @@ const SideNav = () => {
   const userMenu = [
     { name: "Profile", icon: User, path: "/Profile" },
     { name: "Settings", icon: Settings, path: "/Settings" },
-    { name: "Logout", icon: LogOutIcon, path: "/Logout" },
+    // { name: "Logout", icon: LogOutIcon, path: "/Logout" },
   ];
 
   const currentRoute = useLocation();

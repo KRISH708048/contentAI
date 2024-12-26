@@ -5,8 +5,9 @@ import TextOutput from "./TextOutput";
 import Template from "../pages/Template";
 import { getChatResponse } from "../../../utils/Models";
 import Button from "@mui/joy/Button";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenAtom } from "../../store/atoms/tokens";
+import { userAtom } from "../../store/atoms/authAtom";
 
 const Content = () => {
   const { slug } = useParams();
@@ -16,6 +17,7 @@ const Content = () => {
   const filteredForm = Template.filter((item) => item.slug === slug); // to retrieve current template in use
   const navigateBack = useNavigate();
   const [tokenCount, setTokenCount] = useRecoilState(tokenAtom);
+  const user = useRecoilValue(userAtom);
   const handleBackButton = ()=>{
     navigateBack('/Dashboard');
   }
@@ -34,8 +36,14 @@ const Content = () => {
       setAiOutput(result);
       // console.log("filteredForm[0]?: ", filteredForm[0]?.slug);
       // console.log("currentForm: ", currentForm);
-      await saveToDatabase(currentForm, filteredForm[0]?.slug, result);
+      const savedData = await saveToDatabase(currentForm, filteredForm[0]?.slug, result, user.uid);
+      // console.log(savedData.result);
       setTokenCount((prevValue) => prevValue + result.length);
+      // setHistoryState((prevHistory) => {
+      //   const updatedHistory = [...prevHistory, savedData.result];
+      //   return updatedHistory;
+      // });
+      
       setLoading(false);
     } catch (error) {
       console.error("Error fetching AI response:", error);
@@ -43,7 +51,7 @@ const Content = () => {
     }
   };
 
-  const saveToDatabase = async (formData, slug, resultAi) => {
+  const saveToDatabase = async (formData, slug, resultAi, userID) => {
     try {
       const response = await fetch("http://localhost:3000/api/v1/user/save-ai-output", {
         method: "POST",
@@ -55,7 +63,8 @@ const Content = () => {
           aiResponse: resultAi,
           templatesSlug: slug,
           words: resultAi.length,
-          createdBy: "user",
+          createdBy: user.displayName,
+          uid: userID,
           createdAt: new Date().toISOString(),
         }),
       });
@@ -86,6 +95,7 @@ const Content = () => {
             setCurForm={setCurrentForm}
             filteredForm={filteredForm}
             loading={loading}
+            disabled={!user}
           />
         </div>
         <div className="w-full md:w-3/4">

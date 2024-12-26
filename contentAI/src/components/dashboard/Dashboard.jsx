@@ -6,8 +6,8 @@ const Dashboard = () => {
   const [userSearch, setUserSearch] = useState("");
 
   return (
-    <div className="p-2 w-full flex-col gap-4 bg-white h-screen">
-      <div className="p-4 flex-col bg-violet-500 gap-4 rounded-md">
+    <div className="p-2 w-full flex-col gap-4 h-screen"> 
+      <div className="p-4 flex-col bg-violet-500 bg-gradient-to-r from-violet-600 via-violet-400 to-violet-700 gap-4 rounded-md">
         <h1 className="font-playwrite flex justify-center text-2xl mb-2">
           Browse Template
         </h1>

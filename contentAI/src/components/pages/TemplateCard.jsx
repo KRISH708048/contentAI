@@ -6,7 +6,7 @@ const TemplateCard = ({ item, index }) => {
   return (
     <NavLink to={`/Dashboard/${item?.slug}`}>
       <div
-        className="p-4 shadow-md rounded-md flex flex-col gap-4 cursor-pointer hover:scale-105 transition-transform"
+        className="p-4 shadow-md rounded-md border-slate-500 border-4 bg-slate-200 flex flex-col gap-4 cursor-pointer hover:scale-105 transition-transform"
         key={item.slug || index}
         style={{ marginBottom: "16px" }}
       >

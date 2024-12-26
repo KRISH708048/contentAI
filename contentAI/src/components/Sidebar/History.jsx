@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Table from "@mui/joy/Table";
 import Button from "@mui/joy/Button";
+import { useRecoilValue } from "recoil";
+import { userAtom } from "../../store/atoms/authAtom";
 
 const History = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const userValue = useRecoilValue(userAtom);
   const fetchHistory = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/v1/user/history",
+        `http://localhost:3000/api/v1/user/history?userID=${userValue.uid}`,
         {
           method: "GET",
           headers: {

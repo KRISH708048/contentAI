@@ -3,7 +3,7 @@ import Input from "@mui/joy/Input";
 import Textarea from "@mui/joy/Textarea";
 import Button from "@mui/joy/Button";
 
-const Form = ({ setCurForm, filteredForm, loading }) => {
+const Form = ({ setCurForm, filteredForm, loading, disabled }) => {
   const [formValues, setFormValues] = useState({});
 
   const handleInputChange = (e) => {
@@ -46,6 +46,7 @@ const Form = ({ setCurForm, filteredForm, loading }) => {
               value={formValues[formField.name] || ""}
               onChange={handleInputChange}
               className="w-full"
+              disabled={disabled}
             />
           ) : formField.field === "textarea" ? (
             <Textarea
@@ -55,11 +56,7 @@ const Form = ({ setCurForm, filteredForm, loading }) => {
               value={formValues[formField.name] || ""}
               onChange={handleInputChange}
               className="w-full max-h-44 scroll-m-1"
-              // style={{
-              //   maxHeight: "150px", // Limit the height
-              //   overflow: "auto",   // Add scroll for overflowing content
-              //   resize: "none",     // Disable resizing or use "horizontal" for only horizontal resize
-              // }}
+              disabled={disabled}
             />
           ) : (
             <p className="text-red-500">Unsupported field type</p>
@@ -67,7 +64,7 @@ const Form = ({ setCurForm, filteredForm, loading }) => {
         </div>
       ))}
       <div className="flex justify-center">
-        <Button className="w-1/2" type="submit" color="success" disabled={loading}>
+        <Button className="w-1/2" type="submit" color="success" disabled={loading&&disabled}>
           {loading ? "Loading..." : "Submit"}
         </Button>
       </div>
