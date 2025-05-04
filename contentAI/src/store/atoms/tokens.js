@@ -10,7 +10,7 @@ export const tokenAtom = atom({
 //     get: async () => {
 //         try {
 //             await new Promise(r=>setTimeout(r,2000));
-//             const response = await fetch("http://localhost:3000/api/v1/user/history", {
+//             const response = await fetch("http://localhost:3005/api/v1/user/history", {
 //                 method: "GET",
 //                 headers: {
 //                     "Content-Type": "application/json",

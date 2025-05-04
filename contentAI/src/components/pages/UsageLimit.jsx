@@ -11,7 +11,7 @@ const UsageLimit = () => {
   const getToken = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/v1/user/usage?userID=${user.uid}`,
+        `http://localhost:3005/api/v1/user/usage?userID=${user.uid}`,
         {
           method: "GET",
           headers: {

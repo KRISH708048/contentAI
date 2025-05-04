@@ -1,7 +1,8 @@
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 // import dotenv from 'dotenv';
-// dotenv.config();
-
+// // dotenv.config();
+// import { generationConfigAtom } from "../src/store/atoms/settingsAtom";
+// import { useRecoilValue } from "recoil";
 const apiKey = "AIzaSyBjCVQdiXIh9_Q_uY4vbXx-frf6lEy7wZI" ;
 const genAI = new GoogleGenerativeAI(apiKey);
 
@@ -18,9 +19,9 @@ const model = genAI.getGenerativeModel({
 // };
 
 // Asynchronous function to start a chat session and send a message
-export async function getChatResponse(input) {
+export async function getChatResponse(input, generationConfig) {
   try {
-    const generationConfig = useRecoilValue(generationConfigAtom);
+    // const generationConfig = useRecoilValue(generationConfigAtom);
     const chatSession = await model.startChat({
       generationConfig,
       history: [],

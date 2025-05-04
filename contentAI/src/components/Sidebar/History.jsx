@@ -12,7 +12,7 @@ const History = () => {
   const fetchHistory = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/v1/user/history?userID=${userValue.uid}`,
+        `http://localhost:3005/api/v1/user/history?userID=${userValue.uid}`,
         {
           method: "GET",
           headers: {

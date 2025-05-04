@@ -1,11 +1,10 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userAtom } from "../../store/atoms/authAtom";
 import avatar from "../../assets/avatar.jpg";
-
+import {auth,signOut} from "../../../Auth/firebase"
 const UserProfile = () => {
-  const user = useRecoilValue(userAtom);
-
+  const [user, setUser] = useRecoilState(userAtom);
   if (!user) {
     return <div>Please sign in to view your profile.</div>;
   }
@@ -13,7 +12,7 @@ const UserProfile = () => {
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      setUser(null);
+      setUser(null);  
     } catch (error) {
       console.error("Error signing out:", error);
     }

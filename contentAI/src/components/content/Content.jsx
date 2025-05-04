@@ -8,6 +8,7 @@ import Button from "@mui/joy/Button";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenAtom } from "../../store/atoms/tokens";
 import { userAtom } from "../../store/atoms/authAtom";
+import { generationConfigAtom } from "../../store/atoms/settingsAtom";
 
 const Content = () => {
   const { slug } = useParams();
@@ -17,6 +18,7 @@ const Content = () => {
   const filteredForm = Template.filter((item) => item.slug === slug); // to retrieve current template in use
   const navigateBack = useNavigate();
   const [tokenCount, setTokenCount] = useRecoilState(tokenAtom);
+  const generationConfig = useRecoilValue(generationConfigAtom);
   const user = useRecoilValue(userAtom);
   const handleBackButton = ()=>{
     navigateBack('/Dashboard');
@@ -32,7 +34,7 @@ const Content = () => {
       setLoading(true);
       const currentPrompt = filteredForm[0]?.aiPrompt || "";
       const aiPrompt = JSON.stringify(currentForm) + ", " + currentPrompt;
-      const result = await getChatResponse(aiPrompt);
+      const result = await getChatResponse(aiPrompt, generationConfig );
       setAiOutput(result);
       // console.log("filteredForm[0]?: ", filteredForm[0]?.slug);
       // console.log("currentForm: ", currentForm);
@@ -53,7 +55,7 @@ const Content = () => {
 
   const saveToDatabase = async (formData, slug, resultAi, userID) => {
     try {
-      const response = await fetch("http://localhost:3000/api/v1/user/save-ai-output", {
+      const response = await fetch("http://localhost:3005/api/v1/user/save-ai-output", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
